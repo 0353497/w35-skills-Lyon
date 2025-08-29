@@ -26,8 +26,11 @@ flutter:
         - asset: assets/module_c_pm/media-files/fonts/DIN Condensed Bold.ttf
   assets: 
     - assets/module_c_pm/media-files/images/Basilique.jpg
+    - assets/module_c_pm/media-files/images/map.jpg
     - assets/module_c_pm/media-files/data/
     - assets/module_c_pm/media-files/images/histories/
     - assets/module_c_pm/media-files/images/moments/
+    - assets/module_c_pm/media-files/icons/
+
 
 

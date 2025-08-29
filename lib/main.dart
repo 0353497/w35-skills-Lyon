@@ -3,6 +3,7 @@ import 'dart:ui_web';
 import 'package:edu_ws2024_cniek_pm/pages/history_page.dart';
 import 'package:edu_ws2024_cniek_pm/pages/homepage.dart';
 import 'package:edu_ws2024_cniek_pm/pages/moments_page.dart';
+import 'package:edu_ws2024_cniek_pm/pages/recommendation_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -37,7 +38,12 @@ class MainApp extends StatelessWidget {
                   height: MediaQuery.of(context).size.height,
                   child: MomentsPage(),
               ),
-
+               Container(
+                color: Colors.white,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: RecommendationPage(),
+              ),
             ],
           )
           ),
