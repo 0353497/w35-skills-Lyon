@@ -1,0 +1,33 @@
+name: edu_ws2024_cniek_pm
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Lyon
+      fonts:
+        - asset: assets/module_c_pm/media-files/fonts/Avenir.ttc
+    - family: Lyon2
+      fonts:
+        - asset: assets/module_c_pm/media-files/fonts/DIN Condensed Bold.ttf
+  assets: 
+    - assets/module_c_pm/media-files/images/Basilique.jpg
+    - assets/module_c_pm/media-files/data/
+    - assets/module_c_pm/media-files/images/histories/
+    - assets/module_c_pm/media-files/images/moments/
+
+
