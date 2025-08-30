@@ -30,6 +30,7 @@ flutter:
     - assets/module_c_pm/media-files/data/
     - assets/module_c_pm/media-files/images/histories/
     - assets/module_c_pm/media-files/images/moments/
+    - assets/module_c_pm/media-files/images/recommends/
     - assets/module_c_pm/media-files/icons/
 
 

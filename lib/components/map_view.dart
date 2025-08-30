@@ -1,5 +1,4 @@
 
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -21,7 +20,11 @@ class MapView extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Image.asset("assets/module_c_pm/media-files/images/map.jpg", fit: BoxFit.cover, width: double.infinity,),
+            InteractiveViewer(
+              minScale: 2.5,
+              maxScale: 4,
+              child: Image.asset("assets/module_c_pm/media-files/images/map.jpg", fit: BoxFit.cover, width: double.infinity,),
+              ),
             Positioned(
               right: 20,
               bottom: 20,
@@ -31,7 +34,8 @@ class MapView extends StatelessWidget {
                 ),
                 onPressed: () {
                   
-              }, icon: Image.asset("assets/module_c_pm/media-files/icons/open_in_full.png", fit: BoxFit.contain, width: 20, scale: 3,)),
+              },
+              icon: Image.asset("assets/module_c_pm/media-files/icons/open_in_full.png", fit: BoxFit.contain, width: 20,)),
             )
           ],
         ),

@@ -37,7 +37,7 @@ class _HistoryPagesState extends State<HistoryPages> with TickerProviderStateMix
       setState(() {
         isLoading = false;
       });
-      print('Error loading history data: $e');
+      debugPrint('Error loading history data: $e');
     }
   }
 
