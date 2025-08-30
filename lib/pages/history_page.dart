@@ -11,8 +11,10 @@ class HistoryPages extends StatefulWidget {
 class _HistoryPagesState extends State<HistoryPages> with TickerProviderStateMixin {
   List<Map<String, dynamic>> historyData = [];
   bool isLoading = true;
-  late TabController _tabController;
   late AnimationController _progressController;
+  late AnimationController _carouselController;
+  late AnimationController _textController;
+  late Animation<double> _expandAnimation;
   int currentIndex = 0;
 
   @override
@@ -42,15 +44,32 @@ class _HistoryPagesState extends State<HistoryPages> with TickerProviderStateMix
   }
 
   void _initializeControllers() {
-    _tabController = TabController(length: historyData.length, vsync: this);
     _progressController = AnimationController(
       duration: Duration(seconds: 3),
       vsync: this,
     );
     
+    _carouselController = AnimationController(
+      duration: Duration(milliseconds: 800),
+      vsync: this,
+    );
+    
+    _textController = AnimationController(
+      duration: Duration(milliseconds: 600),
+      vsync: this,
+    );
+    
+    _expandAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _carouselController,
+      curve: Curves.easeInOut,
+    ));
+    
     _progressController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        _nextTab();
+        _nextSlide();
       }
     });
   }
@@ -59,21 +78,130 @@ class _HistoryPagesState extends State<HistoryPages> with TickerProviderStateMix
     _progressController.forward();
   }
 
-  void _nextTab() {
-    setState(() {
-      currentIndex = (currentIndex + 1) % historyData.length;
-    });
-    
-    _tabController.animateTo(currentIndex);
-    _progressController.reset();
-    _progressController.forward();
+  void _nextSlide() {
+    if (mounted) {
+      _textController.forward().then((_) {
+        _carouselController.forward().then((_) {
+          setState(() {
+            currentIndex = (currentIndex + 1) % historyData.length;
+          });
+          
+          _carouselController.reset();
+          _textController.reverse();
+          _progressController.reset();
+          _progressController.forward();
+        });
+      });
+    }
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
     _progressController.dispose();
+    _carouselController.dispose();
+    _textController.dispose();
     super.dispose();
+  }
+
+  Widget _buildImageCarousel() {
+    if (historyData.isEmpty) return SizedBox();
+    
+    return Container(
+      height: 400,
+      width: 600,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Stack(
+          children: [
+            Container(
+              width: 600,
+              height: 400,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/module_c_pm/media-files/images/${historyData[currentIndex]['image']}'
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            
+            AnimatedBuilder(
+              animation: _expandAnimation,
+              builder: (context, child) {
+                int nextIndex = (currentIndex + 1) % historyData.length;
+                return Positioned(
+                  left: 0,
+                  top: 0,
+                  child: Container(
+                    width: 600 * _expandAnimation.value,
+                    height: 400,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          'assets/module_c_pm/media-files/images/${historyData[nextIndex]['image']}'
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCurrentContent() {
+    if (historyData.isEmpty) return SizedBox();
+    final currentHistory = historyData[currentIndex];
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  currentHistory['phase'],
+                  style: TextStyle(
+                    color: Colors.pink,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  currentHistory['time_range'],
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: Text(
+                currentHistory['intro'],
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -137,6 +265,8 @@ class _HistoryPagesState extends State<HistoryPages> with TickerProviderStateMix
             Expanded(
               child: Column(
                 children: [
+                  SizedBox(height: 20),
+                  
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Row(
@@ -191,73 +321,15 @@ class _HistoryPagesState extends State<HistoryPages> with TickerProviderStateMix
                     ),
                   ),
                   
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                   
                   Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: historyData.map((history) => 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                              if (history['image'] != null)
-                                  Container(
-                                    height: 400,
-                                    width: 600,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      image: DecorationImage(
-                                        image: AssetImage('assets/module_c_pm/media-files/images/${history['image']}'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(24.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              history['phase'],
-                                              style: TextStyle(
-                                                color: Colors.pink,
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              history['time_range'],
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16,
-                                                fontStyle: FontStyle.italic,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                         Text(
-                                          history['intro'],
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 16,
-                                            height: 1.5,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ).toList(),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildImageCarousel(),
+                        _buildCurrentContent(),
+                      ],
                     ),
                   ),
                 ],
