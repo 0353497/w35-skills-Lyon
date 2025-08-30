@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class CustomLetter extends StatelessWidget {
   const CustomLetter({super.key});
@@ -42,7 +43,9 @@ class CustomLetter extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
-            ),
+            ).animate(
+              delay: Duration(milliseconds: 200)
+            ).slide().fadeIn(),
           );
             }
             return const SizedBox(width: 48);

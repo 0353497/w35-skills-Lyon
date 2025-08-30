@@ -274,15 +274,29 @@ class _RecommendationPageState extends State<RecommendationPage> {
                                       Expanded(
                                         child: isLoading
                                           ? Center(child: CircularProgressIndicator())
-                                          : SingleChildScrollView(
-                                              child: Column(
-                                                spacing: 16,
-                                                children: comments.map((comment) => CommentCard(
-                                                  question: comment['question'] ?? '',
-                                                  answer: comment['answer'] ?? '',
-                                                  username: comment['username'] ?? '',
-                                                  likes: comment['likes'] ?? 0,
-                                                )).toList(),
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(12),
+                                                border: Border.all(
+                                                  color: Colors.grey,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(16.0),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    spacing: 24,
+                                                    children: comments.map((comment) => CommentItem(
+                                                      question: comment['question'] ?? '',
+                                                      answer: comment['answer'] ?? '',
+                                                      username: comment['username'] ?? '',
+                                                      likes: comment['likes'] ?? 0,
+                                                      image: comment['avatar']?? '',
+                                                    )).toList(),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                       ),
@@ -371,88 +385,80 @@ class OwnChip extends StatelessWidget {
   }
 }
 
-class CommentCard extends StatelessWidget {
-  const CommentCard({
+class CommentItem extends StatelessWidget {
+  const CommentItem({
     super.key,
     required this.question,
     required this.answer,
     required this.username,
-    required this.likes,
+    required this.likes, required this.image,
   });
 
   final String question;
   final String answer;
   final String username;
   final int likes;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.grey,
-          width: 1,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(question,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 15,
+          color: Colors.black87,
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+        ),
+        SizedBox(height: 12),
+        Row(
+          children: [
+            CircleAvatar(
+              radius: 16,
+              foregroundImage: AssetImage("assets/module_c_pm/media-files/images/$image"),
+              child: Text(username.isNotEmpty ? username[0].toUpperCase() : "?", 
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12
+                )
+              ),
+            ),
+            SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("$username:",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    color: Colors.grey
+                  )
+                ),
+              ],
+            )
+          ],
+        ),
+        SizedBox(height: 12),
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(question,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-              color: Colors.black87,
-            ),
-            ),
-            SizedBox(height: 12),
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 16,
-                  child: Text(username.isNotEmpty ? username[0].toUpperCase() : "?", 
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12
-                    )
+            SizedBox(
+              width: 32,
+              child: Column(
+                children: [
+                  Container(
+                    width: 1,
+                    height: 100,
+                    color: Colors.grey,
                   ),
-                ),
-                SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(username,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
-                        color: Colors.black87
-                      )
-                    ),
-                    Text("Travel Expert",
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.grey[600]
-                      )
-                    ),
-                  ],
-                )
-              ],
-            ),
-            SizedBox(height: 12),
-            Container(
-              padding: EdgeInsets.only(left: 12),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Colors.black,
-                    width: 3,
-                  ),
-                ),
+                ],
               ),
+            ),
+            SizedBox(width: 8),
+            Expanded(
               child: Text(answer,
                 style: TextStyle(
                   fontSize: 13,
@@ -461,31 +467,38 @@ class CommentCard extends StatelessWidget {
                 )
               ),
             ),
-            SizedBox(height: 12),
+          ],
+        ),
+        SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.favorite_border, 
-                      size: 16, 
-                      color: Colors.grey[600]
-                    ),
-                    SizedBox(width: 4),
-                    Text("$likes Likes", 
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500
-                      ),
-                    ),
-                  ],
+                Icon(Icons.favorite_border, 
+                  size: 16, 
+                  color: Colors.grey[600]
+                ),
+                SizedBox(width: 4),
+                Text("$likes Likes", 
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500
+                  ),
                 ),
               ],
             ),
           ],
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Container(
+            height: 1,
+            color: Colors.grey,
+          ),
+        )
+      ],
     );
   }
 }
