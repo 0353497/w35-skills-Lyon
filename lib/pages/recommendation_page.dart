@@ -111,6 +111,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ExpansionTile(
+                            shape: Border.all(width: 0, color: Colors.transparent),
                             title: Text("Things to do",
                             style: TextStyle(
                               color: Colors.black,
@@ -133,6 +134,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
                             ],
                           ),
                           ExpansionTile(
+ shape: Border.all(width: 0, color: Colors.transparent),
                             title: Text("Budget",
                              style: TextStyle(
                               color: Colors.black,
@@ -149,8 +151,8 @@ class _RecommendationPageState extends State<RecommendationPage> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        OwnChip(label: "\$500"),
-                                        OwnChip(label: "\$800"),
+                                        OwnChip(label: "\$200.000"),
+                                        OwnChip(label: "\$800.000"),
                                       ],
                                     ),
                                     SliderTheme(
@@ -182,7 +184,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
                                           max: 1000,
                                           onChanged: (values) {
                                           },
-                                          values: RangeValues(500, 800),
+                                          values: RangeValues(200, 800),
                                         ),
                                       ),
                                     ),
@@ -192,6 +194,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
                             ],
                           ),
                           ExpansionTile(
+                             shape: Border.all(width: 0, color: Colors.transparent),
                             title: Text("Traveler rating",
                             style: TextStyle(
                               color: Colors.black,
@@ -232,7 +235,7 @@ class _RecommendationPageState extends State<RecommendationPage> {
                     ),
                     if (!isMapExpanded)
                       Expanded(
-                        flex: 2,
+                        flex: 5,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Row(
