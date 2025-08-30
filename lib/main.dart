@@ -15,6 +15,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: "Lyon"
+      ),
       home: Scaffold(
         backgroundColor: Colors.deepPurple.shade700,
         body: SingleChildScrollView(

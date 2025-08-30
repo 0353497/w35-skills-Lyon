@@ -295,6 +295,7 @@ class _HistoryPagesState extends State<HistoryPages> with TickerProviderStateMix
                                       }
                                       
                                       return LinearProgressIndicator(
+                                        borderRadius: BorderRadius.circular(8),
                                         value: progress,
                                         backgroundColor: Colors.transparent,
                                         valueColor: AlwaysStoppedAnimation<Color>(
