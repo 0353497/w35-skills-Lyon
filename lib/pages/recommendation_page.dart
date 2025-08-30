@@ -216,6 +216,9 @@ class _RecommendationPageState extends State<RecommendationPage> {
               Expanded(
                 child: Column(
                   children: [
+
+                    //ik had hier beter eigenlijk een hero widget voor kunnen gebruiken..
+                    //maar dat besef je natuurlijk later...
                     Expanded(
                       flex: isMapExpanded ? 1 : 3,
                       child: AnimatedContainer(
@@ -388,13 +391,6 @@ class CommentCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black87,
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
         border: Border.all(
           color: Colors.grey,
           width: 1,
